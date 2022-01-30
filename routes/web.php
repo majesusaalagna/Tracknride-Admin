@@ -21,7 +21,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('users');
+Route::get('/archive_commuters', [App\Http\Controllers\UsersController::class, 'index'])->name('archive_commuters');
 Route::get('/userDrivers', [App\Http\Controllers\UserDriversController::class, 'index'])->name('userDrivers');
+Route::get('/archive_userDrivers', [App\Http\Controllers\UserDriversController::class, 'index'])->name('archive_userDrivers');
 Route::get('/feedback', [App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback');
 Route::get('/earnings', [App\Http\Controllers\EarningsController::class, 'index'])->name('earnings');
 Route::get('/complaints', [App\Http\Controllers\ComplaintsController::class, 'index'])->name('complaints');

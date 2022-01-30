@@ -11,9 +11,11 @@ return [
     'multilevel'                    => 'Manage Users',
     'level_one'                     => 'Commuters',
     'level_two'                     => 'Drivers',
+    'level_three'                   => 'Archived Commuters',
+    'level_four'                    => 'Archived Drivers',
     'labels'                        => 'LABELS',
     'payment reports'               => 'Payment Reports',
     'complaints'                    => 'Reports',
-    'feedbacks'                      => 'Feedbacks',
+    'feedbacks'                     => 'Feedbacks',
 
 ];

@@ -14,6 +14,7 @@ class CarDetailsController extends Controller
             ->withDatabaseUri('https://track-n-ride-default-rtdb.firebaseio.com/');
             $database = $factory->createDatabase();
             $carDetails = $database->getReference('drivers')->getChild($key)->getChild('car_details')->getValue();
-            return view('car-details', compact('carDetails', 'key'));
+            $credentials = $database->getReference('drivers')->getChild($key)->getChild('credentials')->getValue();
+            return view('car-details', compact('carDetails', 'key', 'credentials'));
     }
 }

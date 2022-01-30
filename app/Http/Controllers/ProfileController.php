@@ -27,12 +27,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        //$users = DB::select('SELECT * FROM `users`');
-        //return view('profile',['users'=>$users]);
-
-       // $user = Auth::user();
         return view('profile');
-
     }
     
     public function profileUpdate(Request $request){
@@ -42,7 +37,7 @@ class ProfileController extends Controller
             'name' =>'required|min:4|string|max:255',
             'email'=>'required|email|string|max:255'
         ]);
-        $user =Auth::user();
+        $user = Auth::user();
         $user->name = $request['name'];
         $user->email = $request['email'];
         $user->save();

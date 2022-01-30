@@ -45,7 +45,15 @@
             </div>
                 <input name="cartype" id="cartype" class="form-control" value="{{ $carDetails['type'] }}" aria-describedby="inputGroup-sizing-sm">
         </div>
-</div> 
+
+        @if($credentials != NULL && COUNT($credentials) > 0)
+            <h3>Credentials</h3>
+            @foreach($credentials as $key => $item)
+                <img src="{{ $item['url'] }}" alt="Paris" width="300" height="300">
+            @endforeach
+        @endif
+
+    </div> 
 </div>
 @stop
 
