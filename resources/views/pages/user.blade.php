@@ -44,7 +44,7 @@
                           @if(ISSET($item['disable']))
                             <button type="button" name="{{ $item['name'] }}" id="{{ $key }}" class="btn btn-success enable">Enable</button>
                           @else
-                            <button type="button" name="{{ $item['name'] }}" id="{{ $key }}" class="btn btn-danger disable">Disable</button>
+                            <button type="button" name="{{ $item['name'] }}" email="{{ $item['email'] }}" id="{{ $key }}" class="btn btn-danger disable">Disable</button>
                           @endif
                           
                         @else
@@ -79,6 +79,8 @@
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
@@ -102,6 +104,9 @@
   <script>
 
     $(document).ready(() => {
+
+      emailjs.init("user_iFHxqjEKhcUHNngPeL8NE");
+
       $('#example1').DataTable({
         dom: 'Bfrtip',
         buttons: [
@@ -140,6 +145,7 @@
         const name = $(e.currentTarget).attr('name');
         if(confirm("Are you sure to disable "+ name +"? This user will not be able to login their account.")) {
           const reason = prompt("Enter a reason to Disable");
+          const email = $(e.currentTarget).attr('email');
           if(reason.trim().length > 0) {
             const id = $(e.currentTarget).attr('id');
             firebase.database().ref().child('users').child(id).child("disable").update({
@@ -147,7 +153,22 @@
               reason: reason
             })
               .then(() => {
-                window.location.reload(); 
+
+                var templateParams = {
+                  to_name: name,
+                  from_name: 'Track&Ride Admin',
+                  message: "Your account has been disabled because it was used in a way that violates Track N Ride Policies.",
+                  to_email: email
+                };
+
+                emailjs.send('service_a9dy0ud', 'template_77yci37', templateParams)
+                  .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    window.location.reload();
+                  }, function(error) {
+                    console.log('FAILED...', error);
+                  });
+
               })
               .catch(err => console.log(err.message));
           } 
@@ -156,8 +177,10 @@
 
       $('body').on('click', '.enable', (e) => {
         const name = $(e.currentTarget).attr('name');
+
         if(confirm("This account has been disabled. Are you sure to enable again "+ name +"?")) {
           const id = $(e.currentTarget).attr('id');
+          const email = $(e.currentTarget).attr('email');
           firebase.database().ref().child('users').child(id).child('disable').remove()
             .then(() => {
               window.location.reload();

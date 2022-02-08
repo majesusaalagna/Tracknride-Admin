@@ -51,7 +51,7 @@
                         @endif
 
                         @if(!ISSET($item['isApprove']) || (ISSET($item['isApprove']) && $item['isApprove'] == false))
-                          <button type="button" name="{{ $item['name'] }}" id="{{ $key }}" class="btn btn-info approve">Approve</button>
+                          <button type="button" name="{{ $item['name'] }}" email="{{ $item['email'] }}" id="{{ $key }}" class="btn btn-info approve">Approve</button>
                         @else
                           <button type="button" name="{{ $item['name'] }}" id="{{ $key }}" class="btn btn-warning disapprove">Disapprove</button>
                         @endif
@@ -89,6 +89,8 @@
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
@@ -110,6 +112,9 @@
   
   <script>
     $(document).ready(() => {
+
+      emailjs.init("user_iFHxqjEKhcUHNngPeL8NE");
+
       $('#example1').DataTable({
         dom: 'Bfrtip',
         buttons: [
@@ -178,11 +183,27 @@
         const name = $(e.currentTarget).attr('name');
         if(confirm("Did you already check this user credential? Are you sure to approve "+ name +" as a Driver?")) {
           const id = $(e.currentTarget).attr('id');
+          const email = $(e.currentTarget).attr('email');
           firebase.database().ref().child('drivers').child(id).update({
             isApprove: true
           })
             .then(() => {
-              window.location.reload(); 
+
+              var templateParams = {
+                to_name: name,
+                from_name: 'Track&Ride Admin',
+                message: "Congratulations!\nYour Track N Ride account application has been approved.",
+                to_email: email
+              };
+
+              emailjs.send('service_a9dy0ud', 'template_77yci37', templateParams)
+                .then(function(response) {
+                  console.log('SUCCESS!', response.status, response.text);
+                  window.location.reload();
+                }, function(error) {
+                  console.log('FAILED...', error);
+                });
+
             })
             .catch(err => console.log(err.message));
         }
