@@ -21,6 +21,9 @@
                     <th>Name</th>
                     <th>Phone Number</th>
                     <th>Car Details</th>
+                    <th>Car Color</th>
+                    <th>Car Model</th>
+                    <th>Car Number</th>
                     <th>Status</th>
                   </tr>
                   </thead>
@@ -39,6 +42,9 @@
                     <td>{{ $item['phone'] }}</td>
                    
                     <td><a href="{{ url('car-details/'.$key) }}"><i>See Car Details & Credentials</i></a></td>
+                    <td>{{ ISSET($item['car_details']) ? $item['car_details']['car_color'] : "" }}</td>
+                    <td>{{ ISSET($item['car_details']) ? $item['car_details']['car_model'] : "" }}</td>
+                    <td>{{ ISSET($item['car_details']) ? $item['car_details']['car_number'] : "" }}</td>
 
                     <td>
                       @if(Request::path() == "userDrivers")
